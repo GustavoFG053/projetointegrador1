@@ -1,0 +1,48 @@
+{% extends '_layout1.html' %}
+
+{% block head_title %}
+Preencher Informações
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Preencher Informações</h1>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="nome_vendedor">Nome do Vendedor:</label>
+            <input type="text" class="form-control" id="nome_vendedor" name="nome_vendedor" required>
+        </div>
+        <div class="form-group">
+            <label for="nome_loja">Nome da Loja:</label>
+            <input type="text" class="form-control" id="nome_loja" name="nome_loja" required>
+        </div>
+        <div class="form-group">
+            <label for="nome_produto">Nome do Produto:</label>
+            <input type="text" class="form-control" id="nome_produto" name="nome_produto" required>
+        </div>
+        <div class="form-group">
+            <label for="quantidade_coletada">Quantidade Coletada:</label>
+            <input type="number" class="form-control" id="quantidade_coletada" name="quantidade_coletada" step="1" required>
+        </div>
+        <div class="form-group">
+            <label for="lote">Lote:</label>
+            <input type="text" class="form-control" id="lote" name="lote" required>
+        </div>
+        <div class="form-group">
+            <label for="data_fabricacao">Data de Fabricação:</label>
+            <input type="date" class="form-control" id="data_fabricacao" name="data_fabricacao" required>
+        </div>
+        <div class="form-group">
+            <label for="motivo_da_coleta">Motivo da Coleta:</label>
+            <textarea class="form-control" id="motivo_da_coleta" name="motivo_da_coleta" required></textarea>
+        </div>
+        <div class="form-group">
+            <label for="data_da_coleta">Data da Coleta:</label>
+            <input type="date" class="form-control" id="data_da_coleta" name="data_da_coleta" required>
+        </div>
+        <button type="submit" class="btn btn-primary mt-3">Salvar</button>
+    </form>
+</div>
+{% endblock %}
+

@@ -1,0 +1,87 @@
+{% extends '_layout1.html' %}
+
+{% block head_title %}
+Editar Produto
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Editar Produto</h1>
+    <form id="editar-produto-form" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            {{ form.nome_vendedor.label_tag }}
+            <input type="text" class="form-control" name="{{ form.nome_vendedor.name }}" value="{{ produto.nome_vendedor }}" required>
+        </div>
+        <div class="form-group">
+            {{ form.nome_loja.label_tag }}
+            <input type="text" class="form-control" name="{{ form.nome_loja.name }}" value="{{ produto.nome_loja }}" required>
+        </div>
+        <div class="form-group">
+            {{ form.nome_produto.label_tag }}
+            <input type="text" class="form-control" name="{{ form.nome_produto.name }}" value="{{ produto.nome_produto }}" required>
+        </div>
+        <div class="form-group">
+            {{ form.quantidade_coletada.label_tag }}
+            <input type="number" class="form-control" name="{{ form.quantidade_coletada.name }}" value="{{ produto.quantidade_coletada}}" step="1" required>
+        </div>
+        <div class="form-group">
+            {{ form.lote.label_tag }}
+            <input type="text" class="form-control" name="{{ form.lote.name }}" value="{{ produto.lote }}" required>
+        </div>
+        <div class="form-group">
+            {{ form.data_fabricacao.label_tag }}
+            <input type="date" class="form-control" name="{{ form.data_fabricacao.name }}" value="{{ produto.data_fabricacao|date:'Y-m-d' }}" required>
+        </div>
+        <div class="form-group">
+            {{ form.motivo_da_coleta.label_tag }}
+            <textarea class="form-control" name="{{ form.motivo_da_coleta.name }}" required>{{ produto.motivo_da_coleta }}</textarea>
+        </div>
+        <div class="form-group">
+            {{ form.data_da_coleta.label_tag }}
+            <input type="date" class="form-control" name="{{ form.data_da_coleta.name }}" value="{{ produto.data_da_coleta|date:'Y-m-d' }}" required>
+        </div>
+        <button type="submit" class="btn btn-primary mt-3">Salvar</button>
+    </form>
+</div>
+
+<div id="message-container" class="container mt-3">
+    <!-- Mensagem de sucesso será exibida aqui -->
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('editar-produto-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            var form = event.target;
+            var formData = new FormData(form);
+
+            fetch(form.action, {
+                method: form.method,
+                body: formData,
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Exibir mensagem de sucesso
+                    document.getElementById('message-container').innerHTML = '<div class="alert alert-success" role="alert">Produto editado com sucesso!</div>';
+                    // Redirecionar para a página de registros após 2 segundos
+                    setTimeout(function() {
+                        window.location.href = '{% url "registro" %}';
+                    }, 2000);
+                } else {
+                    throw new Error('Erro ao processar a solicitação.');
+                }
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+            });
+        });
+    });
+</script>
+{% endblock %}
+
+
+

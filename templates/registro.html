@@ -1,0 +1,96 @@
+{% extends '_layout1.html' %}
+
+{% block head_title %}
+Registros de Produtos
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Registros de Produtos</h1>
+    <table class="table mt-5" id="product-table">
+        <thead>
+            <tr>
+                <th class="small-text">Nome do Vendedor</th>
+                <th class="small-text">Nome da Loja</th>
+                <th class="small-text">Nome do Produto</th>
+                <th class="small-text">Quantidade Coletada</th>
+                <th class="small-text">Lote</th>
+                <th class="small-text">Data de Fabricação</th>
+                <th class="small-text">Motivo da Coleta</th>
+                <th class="small-text">Data da Coleta</th>
+                <th class="text-center small-text">Troca Confirmada</th>
+                <th class="text-center small-text">Ações</th>
+                <th class="text-center small-text">Opções</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for produto in produtos %}
+            <tr id="produto-{{ produto.id }}">
+                <td class="small-text">{{ produto.nome_vendedor }}</td>
+                <td class="small-text">{{ produto.nome_loja }}</td>
+                <td class="small-text">{{ produto.nome_produto }}</td>
+                <td class="small-text">{{ produto.quantidade_coletada }}</td>
+                <td class="small-text">{{ produto.lote }}</td>
+                <td class="small-text">{{ produto.data_fabricacao }}</td>
+                <td class="small-text">{{ produto.motivo_da_coleta }}</td>
+                <td class="small-text">{{ produto.data_da_coleta }}</td>
+                <td class="text-center small-text">{{ produto.troca_confirmada|yesno:"Sim,Não" }}</td>
+                <td class="text-center small-text">
+                    {% if request.user.is_superuser %}
+                    <!-- Botões para confirmar e recusar -->
+                    <div class="btn-group" role="group">
+                        <form class="confirmar-form" action="{% url 'confirmar_troca' produto.id %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-success btn-sm">Confirmar</button>
+                        </form>
+                        <br>
+                        <form class="recusar-form" action="{% url 'recusar_troca' produto.id %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger btn-sm">Recusar</button>
+                        </form>
+                    </div>
+                    {% endif %}
+                </td>
+                <td class="text-center small-text">
+                    <!-- Botões para editar e excluir -->
+                    <div class="btn-group" role="group">
+                        <form action="{% url 'editar_produto' produto.id %}" method="get">
+                            <button type="submit" class="btn btn-primary btn-sm btn-edit">Editar</button>
+                        </form>
+                        <form action="{% url 'excluir_registro' produto.id %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-warning btn-sm btn-delete">Excluir</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<style>
+    .btn-group .btn {
+        margin-right: 5px;
+    }
+
+    .btn-edit, .btn-delete {
+        margin-bottom: 5px;
+    }
+
+    #product-table th:nth-last-child(2),
+    #product-table td:nth-last-child(2),
+    #product-table th:nth-last-child(3),
+    #product-table td:nth-last-child(3) {
+        text-align: center;
+    }
+
+    .small-text {
+        font-size: 12px;
+    }
+
+    ul {
+        list-style-type: none;
+        padding-left: 0;
+    }
+</style>
+{% endblock %}

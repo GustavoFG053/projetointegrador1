@@ -1,0 +1,53 @@
+{% extends '_layout1.html' %}
+
+{% block content %}
+    <div class="card">
+        <div class="card-header">
+            <h5 class="card-title">Registro de Usuário</h5>
+        </div>
+        <div class="card-body">
+            <form id="signup-form" method="post" action="{% url 'signup' %}">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-success">Registro</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="message-container"></div>
+{% endblock %}
+
+{% block javascript %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('signup-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            var form = event.target;
+            var formData = new FormData(form);
+
+            fetch(form.action, {
+                method: form.method,
+                body: formData,
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    document.getElementById('message-container').innerHTML = '<div class="alert alert-success" role="alert">Usuário criado com sucesso!</div>';
+                    // Redirecionar para a tela de login após 2 segundos
+                    setTimeout(function() {
+                        window.location.href = '{% url "login" %}';
+                    }, 2000);
+                } else {
+                    return response.text().then(text => { throw new Error(text) });
+                }
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+                document.getElementById('message-container').innerHTML = '<div class="alert alert-danger" role="alert">Erro ao criar usuário. Por favor, tente novamente.</div>';
+            });
+        });
+    });
+</script>
+{% endblock %}

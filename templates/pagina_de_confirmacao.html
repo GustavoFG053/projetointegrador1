@@ -1,0 +1,18 @@
+{% extends '_layout1.html' %}
+{% load static %}
+
+{% block head_title %}
+   Página de Confirmação
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        {% for message in messages %}
+            {% if message.tags == 'success' %}
+                <div class="alert alert-success">
+                    {{ message }}
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+{% endblock %}
